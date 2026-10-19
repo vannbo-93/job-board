@@ -1,16 +1,23 @@
 /** @format */
 
-type Props = {
-  params: Promise<{ jobId: string }>;
-};
+import { Suspense } from "react";
 
-async function jobDetailsPage({ params }: Props) {
-  const { jobId } = await params;
-  console.log(jobId);
+export default function EditJobPage({
+  params,
+}: {
+  params: Promise<{ jobId: string }>;
+}) {
   return (
-    <div>
-      <h1>Edit Job</h1>
-    </div>
+    <main className="p-10">
+      <h1 className="text-2xl font-bold">Edit job</h1>
+      <Suspense fallback={<p>Loading...</p>}>
+        <JobId params={params} />
+      </Suspense>
+    </main>
   );
 }
-export default jobDetailsPage;
+
+async function JobId({ params }: { params: Promise<{ jobId: string }> }) {
+  const { jobId } = await params;
+  return <p>Editing job #{jobId}</p>;
+}

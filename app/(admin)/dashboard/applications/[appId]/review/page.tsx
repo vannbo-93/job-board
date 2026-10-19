@@ -1,16 +1,22 @@
 /** @format */
+import { Suspense } from "react";
 
-type Props = {
-  params: Promise<{ applicationId: string }>;
-};
-
-async function ApplicationReviewPage({ params }: Props) {
-  const { applicationId } = await params;
-  console.log(applicationId);
+export default function ApplicationReviewPage({
+  params,
+}: {
+  params: Promise<{ appId: string }>;
+}) {
   return (
-    <div>
-      <h1>Application Review</h1>
-    </div>
+    <main className="p-10">
+      <h1 className="text-2xl font-bold">Review application</h1>
+      <Suspense fallback={<p>Loading...</p>}>
+        <AppId params={params} />
+      </Suspense>
+    </main>
   );
 }
-export default ApplicationReviewPage;
+
+async function AppId({ params }: { params: Promise<{ appId: string }> }) {
+  const { appId } = await params;
+  return <p>Application #{appId}</p>;
+}
