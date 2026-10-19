@@ -6,6 +6,8 @@ export function proxy(request: NextRequest) {
   const host = request.headers.get("host") ?? "";
   const { pathname } = request.nextUrl;
 
+  console.log("Request:", host, pathname);
+
   // القاعدة 1: الرابط القديم
   if (pathname.startsWith("/amazing-jobs")) {
     return NextResponse.redirect(new URL("/jobs", request.url));
