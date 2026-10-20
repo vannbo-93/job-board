@@ -1,21 +1,22 @@
 /** @format */
 
 import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
 
 export default function DashboardPage() {
   return (
-    <div>
-      <h1 className="text-3xl font-bold p-10">Admin Dashboard</h1>;
-      <Link
-        className=" bg-blue-500 text-white p-2 mr-2 rounded-md hover:bg-blue-600"
-        href="/dashboard/jobs">
-        Jobs
-      </Link>
-      <Link
-        className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
-        href="/dashboard/applications">
-        Applications
-      </Link>
+    <div className="flex flex-col gap-6">
+      <h1 className="text-3xl">Admin Dashboard</h1>
+      <div className="flex gap-4">
+        <Link href="/dashboard/jobs" className={buttonVariants()}>
+          Jobs
+        </Link>
+        <Link
+          href="/dashboard/applications"
+          className={buttonVariants({ variant: "outline" })}>
+          Applications
+        </Link>
+      </div>
     </div>
   );
 }

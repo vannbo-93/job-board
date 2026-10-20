@@ -32,7 +32,7 @@ async function JobInfo({ params }: { params: Promise<{ jobId: string }> }) {
       <p className="text-gray-400">{job.location}</p>
       <Link
         href={`/dashboard/jobs/${job.id}/edit`}
-        className="w-fit rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+        className="inline-flex w-fit items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90">
         Edit
       </Link>
     </div>
