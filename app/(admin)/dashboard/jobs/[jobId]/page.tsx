@@ -3,7 +3,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getJob } from "@/app/lib/jobs";
+import { getJob } from "@/lib/jobs";
 
 export default function AdminJobPage({
   params,

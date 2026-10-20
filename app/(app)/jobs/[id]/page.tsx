@@ -2,7 +2,7 @@
 
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { jobs, getJob } from "@/app/lib/jobs";
+import { jobs, getJob } from "@/lib/jobs";
 
 export function generateStaticParams() {
   return jobs.map((job) => ({ id: job.id }));

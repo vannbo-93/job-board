@@ -1,7 +1,7 @@
 /** @format */
 
 import Link from "next/link";
-import { jobs } from "@/app/lib/jobs";
+import { jobs } from "@/lib/jobs";
 
 export default function JobsPage() {
   return (
