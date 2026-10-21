@@ -1,16 +1,21 @@
 /** @format */
 
-import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
+import { HeroSection } from "@/components/landing/HeroSection";
+// import { FeaturedJobs } from "@/components/landing/FeaturedJobs";
+// import { getJobs } from "@/services/jobs/jobs.service";
 
-export default function HomePage() {
+async function Home() {
+  // const result = await getJobs();
+  // if (!result.success) {
+  //   return <div>Error loading jobs</div>;
+  // }
+  // const { data: jobs = [] } = result;
   return (
-    <div className="flex flex-col items-center gap-4 p-10 text-center">
-      <h1 className="text-5xl">Job Board</h1>
-      <p className="text-2xl">Welcome to Production App!</p>
-      <Link href="/jobs" className={buttonVariants({ variant: "outline" })}>
-        Browse Jobs
-      </Link>
-    </div>
+    <>
+      <HeroSection />
+      {/* <FeaturedJobs jobs={jobs} /> */}
+    </>
   );
 }
+
+export default Home;
