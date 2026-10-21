@@ -1,15 +1,12 @@
 /** @format */
 
-export interface Job {
+export type Job = {
   id: string;
   title: string;
   company: string;
   location: string;
-  type: string;
+  type: "FULL-TIME" | "PART-TIME" | "CONTRACT" | "INTERNSHIP";
   salary: string;
   tags: string[];
-  posted: string;
   description: string;
-  requirements: string[];
-  applicants: number;
-}
+};

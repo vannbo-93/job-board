@@ -1,19 +1,61 @@
 /** @format */
 
-export type Job = {
-  id: string;
-  title: string;
-  location: string;
-  description: string;
-};
+import { Job } from "@/types/Jobs";
 
 export const jobs: Job[] = [
   {
     id: "1",
     title: "Frontend Engineer",
-    location: "Remote Position",
+    company: "NORTHWIND LABS",
+    location: "Remote",
+    type: "FULL-TIME",
+    salary: "$4,000 – $5,500",
+    tags: ["React", "Next.js", "Tailwind"],
     description:
       "We are looking for a Frontend Engineer with 3 years of experience in React, Next.js, and Tailwind CSS.",
+  },
+  {
+    id: "2",
+    title: "Backend Developer",
+    company: "CEDAR SYSTEMS",
+    location: "Casablanca",
+    type: "FULL-TIME",
+    salary: "$3,000 – $4,200",
+    tags: ["Node.js", "Express", "MongoDB"],
+    description:
+      "Build and maintain REST APIs for a growing logistics platform.",
+  },
+  {
+    id: "3",
+    title: "Full Stack Developer",
+    company: "ATLAS DIGITAL",
+    location: "Remote",
+    type: "CONTRACT",
+    salary: "$35 / hour",
+    tags: ["TypeScript", "React", "PostgreSQL"],
+    description:
+      "Six-month contract to rebuild an internal dashboard end to end.",
+  },
+  {
+    id: "4",
+    title: "UI Engineer",
+    company: "PIXEL HARBOR",
+    location: "Rabat",
+    type: "PART-TIME",
+    salary: "$1,800 – $2,400",
+    tags: ["Figma", "React", "Accessibility"],
+    description:
+      "Turn design files into accessible, reusable React components.",
+  },
+  {
+    id: "5",
+    title: "Junior Web Developer",
+    company: "SAHARA SOFT",
+    location: "Kenitra",
+    type: "INTERNSHIP",
+    salary: "$600",
+    tags: ["HTML", "CSS", "JavaScript"],
+    description: "Paid internship for a motivated junior developer.",
   },
 ];
 

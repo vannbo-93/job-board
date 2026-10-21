@@ -1,7 +1,7 @@
 /** @format */
 
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Job } from "@/types/Jobs";
 
 type Props = {
@@ -22,8 +22,8 @@ function FeaturedJobs({ jobs }: Props) {
             HAND-PICKED BY OUR AI
           </p>
         </div>
-        <Link href="/jobs">
-          <Button variant="outline">VIEW ALL →</Button>
+        <Link href="/jobs" className={buttonVariants({ variant: "outline" })}>
+          VIEW ALL →
         </Link>
       </div>
 
@@ -32,7 +32,10 @@ function FeaturedJobs({ jobs }: Props) {
           <Link
             href={`/jobs/${job.id}`}
             key={job.id}
-            className={`brutal-border ${i % 2 !== 0 ? "md:border-l-0" : ""} ${i >= 2 ? "border-t-0" : ""} p-6 hover:bg-accent/10 transition-none group`}>
+            className={`brutal-border p-6 hover:bg-accent/10 transition-none group
+  ${i > 0 ? "border-t-0" : ""}
+  ${i === 1 ? "md:border-t-3 md:border-l-0" : ""}
+  ${i === 3 ? "md:border-l-0" : ""}`}>
             <div className="flex justify-between items-start">
               <div>
                 <p className="font-mono text-xs text-muted-foreground">
