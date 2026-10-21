@@ -16,7 +16,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Job Board",
-  description: "Find your next job",
+  description: "Job Board AI Interview Assistant",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -1,19 +1,16 @@
 /** @format */
 
-import Link from "next/link";
+import NavbarHeader from "@/components/navbar/NavbarHeader";
+import NavbarFooter from "@/components/navbar/NavbarFooter";
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
-      <nav className="flex gap-6 border-b border-gray-700 px-10 py-4">
-        <Link href="/" className="font-bold">
-          Job Board
-        </Link>
-        <Link href="/jobs" className="hover:text-blue-400">
-          Jobs
-        </Link>
-      </nav>
-      <main>{children}</main>
-    </>
+    <div className="flex min-h-screen flex-col bg-background">
+      <NavbarHeader />
+      <main className="flex-1">{children}</main>
+      <NavbarFooter />
+    </div>
   );
 }
+
+export default AppLayout;
