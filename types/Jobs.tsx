@@ -9,4 +9,6 @@ export type Job = {
   salary: string;
   tags: string[];
   description: string;
+  postedAt: string; // تاريخ بصيغة ISO مثل "2026-10-20"
+  applicants: number;
 };

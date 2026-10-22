@@ -20,6 +20,8 @@ export async function saveNewJob(data: NewJob): Promise<Job> {
     id: crypto.randomUUID(),
     ...data,
     type: data.type as Job["type"],
+    postedAt: new Date().toISOString().slice(0, 10),
+    applicants: 0,
   };
   jobs.push(newJob);
   return newJob;
