@@ -11,4 +11,5 @@ export type Job = {
   description: string;
   postedAt: string; // تاريخ بصيغة ISO مثل "2026-10-20"
   applicants: number;
+  requirements: string[];
 };

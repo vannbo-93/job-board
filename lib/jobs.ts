@@ -15,6 +15,11 @@ export const jobs: Job[] = [
     applicants: 47,
     description:
       "We are looking for a Frontend Engineer with 3 years of experience in React, Next.js, and Tailwind CSS.",
+    requirements: [
+      "3+ years with React and TypeScript",
+      "Experience with Next.js App Router",
+      "Comfortable with Tailwind CSS",
+    ],
   },
   {
     id: "2",
@@ -28,6 +33,11 @@ export const jobs: Job[] = [
     applicants: 47,
     description:
       "Build and maintain REST APIs for a growing logistics platform.",
+    requirements: [
+      "3+ years with React and TypeScript",
+      "Experience with Next.js App Router",
+      "Comfortable with Tailwind CSS",
+    ],
   },
   {
     id: "3",
@@ -41,6 +51,11 @@ export const jobs: Job[] = [
     applicants: 47,
     description:
       "Six-month contract to rebuild an internal dashboard end to end.",
+    requirements: [
+      "3+ years with React and TypeScript",
+      "Experience with Next.js App Router",
+      "Comfortable with Tailwind CSS",
+    ],
   },
   {
     id: "4",
@@ -54,6 +69,11 @@ export const jobs: Job[] = [
     applicants: 47,
     description:
       "Turn design files into accessible, reusable React components.",
+    requirements: [
+      "3+ years with React and TypeScript",
+      "Experience with Next.js App Router",
+      "Comfortable with Tailwind CSS",
+    ],
   },
   {
     id: "5",
@@ -66,6 +86,11 @@ export const jobs: Job[] = [
     postedAt: "2026-10-20",
     applicants: 47,
     description: "Paid internship for a motivated junior developer.",
+    requirements: [
+      "3+ years with React and TypeScript",
+      "Experience with Next.js App Router",
+      "Comfortable with Tailwind CSS",
+    ],
   },
 ];
 

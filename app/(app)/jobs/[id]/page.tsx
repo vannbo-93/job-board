@@ -1,39 +1,38 @@
 /** @format */
 
 import { Suspense } from "react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { jobs, getJob } from "@/lib/jobs";
+import JobDescription from "@/components/jobs/JobDescription";
+import JobApplyForm from "@/components/jobs/JobApplyForm";
+import { getJob } from "@/services/jobs/jobs.service";
 
-export function generateStaticParams() {
-  return jobs.map((job) => ({ id: job.id }));
-}
-
-export default function JobDetailsPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default function JobDetailsPage(props: PageProps<"/jobs/[id]">) {
   return (
-    <main className="flex flex-col items-center gap-4 p-10">
-      <h1 className="text-3xl font-bold">Job Details</h1>
-      <Suspense fallback={<p>Loading...</p>}>
-        <JobDetails params={params} />
+    <div className="max-w-7xl mx-auto px-6 py-8">
+      <Link
+        href="/jobs"
+        className="font-mono text-sm text-muted-foreground hover:text-accent transition-none">
+        ← ALL POSITIONS
+      </Link>
+
+      <Suspense fallback={<p className="mt-6 font-mono text-sm">LOADING...</p>}>
+        <JobDetails params={props.params} />
       </Suspense>
-    </main>
+    </div>
   );
 }
 
 async function JobDetails({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const job = getJob(id);
+  const result = await getJob(id);
 
-  if (!job) notFound();
+  if (!result.success) notFound();
 
   return (
-    <div className="flex flex-col items-center gap-2 rounded-lg border border-gray-300 p-6 text-center">
-      <h2 className="text-xl font-bold">{job.title}</h2>
-      <p className="text-gray-400">{job.location}</p>
-      <p>{job.description}</p>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 mt-6">
+      <JobDescription job={result.data} />
+      <JobApplyForm jobId={id} />
     </div>
   );
 }
