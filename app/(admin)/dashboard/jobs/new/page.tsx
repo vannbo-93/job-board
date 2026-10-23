@@ -1,10 +1,21 @@
 /** @format */
 
+import AdminPageHeader from "@/components/common/AdminPageHeader";
+import CreateJobForm from "@/components/job-management/CreateJobForm";
+
 function NewJobPage() {
   return (
-    <div>
-      <h1>New Job</h1>
-    </div>
+    <>
+      <AdminPageHeader
+        title="CREATE JOB"
+        subtitle="NEW LISTING"
+        actionButtonLink="/dashboard/jobs"
+        actionButtonVariant="outline"
+        actionButtonText="← BACK"
+      />
+      <CreateJobForm />
+    </>
   );
 }
+
 export default NewJobPage;
