@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
-import { Job } from "@/types/Jobs";
+import { Job } from "@/types/Job";
 
 type Props = {
   jobs: Job[];

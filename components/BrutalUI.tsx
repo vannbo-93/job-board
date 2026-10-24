@@ -4,49 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import * as React from "react";
 
-export const StatusBadge = ({ status }: { status: string }) => {
-  const variantMap: Record<
-    string,
-    "submitted" | "review" | "shortlist" | "interview" | "rejected"
-  > = {
-    SUBMITTED: "submitted",
-    REVIEW: "review",
-    SHORTLIST: "shortlist",
-    INTERVIEW: "interview",
-    REJECTED: "rejected",
-  };
-
-  return <Badge variant={variantMap[status] || "submitted"}>{status}</Badge>;
-};
-
-export const AiScore = ({
-  score,
-  size = "md",
-}: {
-  score: number;
-  size?: "sm" | "md" | "lg";
-}) => {
-  const color =
-    score >= 8
-      ? "text-accent"
-      : score >= 6
-        ? "text-warning"
-        : "text-destructive";
-  const sizeClasses = {
-    sm: "text-lg",
-    md: "text-3xl",
-    lg: "text-5xl",
-  };
-  return (
-    <div className="font-mono font-bold">
-      <span className={`${color} ${sizeClasses[size]}`}>
-        {score.toFixed(1)}
-      </span>
-      <span className="text-muted-foreground text-xs">/10</span>
-    </div>
-  );
-};
-
 export const MetricBox = ({
   label,
   value,
@@ -118,5 +75,51 @@ export function BrutalSelect({
         </p>
       )}
     </div>
+  );
+}
+
+import type { ApplicationStatus } from "@/types";
+
+export function AiScore({
+  score,
+  size = "md",
+}: {
+  score: number;
+  size?: "sm" | "md";
+}) {
+  const sizeClass = size === "sm" ? "text-sm" : "text-2xl";
+
+  if (score <= 0) {
+    return (
+      <span
+        className={cn("font-mono font-bold text-muted-foreground", sizeClass)}>
+        —
+      </span>
+    );
+  }
+
+  const color =
+    score >= 8
+      ? "text-accent"
+      : score >= 6.5
+        ? "text-foreground"
+        : "text-destructive";
+
+  return (
+    <span className={cn("font-mono font-bold", sizeClass, color)}>
+      {score.toFixed(1)}
+    </span>
+  );
+}
+
+export function StatusBadge({ status }: { status: ApplicationStatus }) {
+  return (
+    <span
+      className={cn(
+        "inline-block w-fit font-mono text-[10px] font-bold px-2 py-0.5 brutal-border-thin",
+        `status-${status.toLowerCase()}`,
+      )}>
+      {status}
+    </span>
   );
 }

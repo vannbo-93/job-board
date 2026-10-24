@@ -1,6 +1,6 @@
 /** @format */
 
-import { Job } from "@/types/Jobs";
+import { Job } from "@/types/Job";
 
 export const jobs: Job[] = [
   {

@@ -5,7 +5,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Job } from "@/types/";
-import { useJobs } from "@/components/context/jobs/JobsContext";
+import { useJobs } from "@/context/jobs/JobsContext";
 
 function daysAgo(date: string, now: number) {
   const days = Math.floor((now - new Date(date).getTime()) / 86_400_000);

@@ -3,7 +3,7 @@
 import { PageHeader } from "@/components/common/ClientPageHeader";
 import FilterSidebar from "@/components/jobs/FilterSidebar";
 import { getJobs } from "@/services/jobs/jobs.service";
-import JobsProvider from "@/components/context/jobs/JobsProvider";
+import JobsProvider from "@/context/jobs/JobsProvider";
 import { JobsList } from "@/components/jobs/JobsList";
 
 async function JobsPage() {

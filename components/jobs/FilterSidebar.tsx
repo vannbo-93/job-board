@@ -4,7 +4,7 @@
 import { Input } from "@/components/ui/input";
 import { BrutalSelect } from "@/components/BrutalUI";
 import { Button } from "@/components/ui/button";
-import { useJobs } from "@/components/context/jobs/JobsContext";
+import { useJobs } from "@/context/jobs/JobsContext";
 
 function FilterSidebar() {
   const {
