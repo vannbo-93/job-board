@@ -26,3 +26,14 @@ export async function saveNewJob(data: NewJob): Promise<Job> {
   jobs.push(newJob);
   return newJob;
 }
+
+export async function updateJobById(
+  id: string,
+  data: NewJob,
+): Promise<Job | null> {
+  const index = jobs.findIndex((job) => job.id === id);
+  if (index === -1) return null;
+
+  jobs[index] = { ...jobs[index], ...data };
+  return jobs[index];
+}

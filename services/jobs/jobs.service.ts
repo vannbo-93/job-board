@@ -1,7 +1,7 @@
 /** @format */
 
 import { createJobSchema, CreateJobInput } from "./jobs.validation";
-import { Job } from "@/types/Jobs";
+import { Job } from "@/types/Job";
 import { z } from "zod";
 import { ServiceResult } from "@/types";
 import {
@@ -43,4 +43,28 @@ export async function getJob(id: string): Promise<ServiceResult<Job>> {
     return { success: false, errors: { id: ["Job not found"] } };
   }
   return { success: true, data: job as Job };
+}
+
+import { updateJobById } from "@/repositories/jobs.repository"; // أضفها إلى الاستيراد الموجود
+
+export async function updateJob(
+  id: string,
+  input: CreateJobInput,
+): Promise<ServiceResult<Job>> {
+  const validated = createJobSchema.safeParse(input);
+
+  if (!validated.success) {
+    return {
+      success: false,
+      errors: z.flattenError(validated.error).fieldErrors,
+    };
+  }
+
+  const updated = await updateJobById(id, validated.data);
+
+  if (!updated) {
+    return { success: false, errors: { id: ["Job not found"] } };
+  }
+
+  return { success: true, data: updated };
 }
