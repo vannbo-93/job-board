@@ -31,9 +31,9 @@ async function ApplicationsManagementPage() {
         title="APPLICATIONS"
         subtitle={`${activeCount} ACTIVE · ${applications.length} TOTAL`}
         // TODO: restore when /dashboard/users exists
-        // actionButtonLink="/dashboard/users"
-        // actionButtonVariant="outline"
-        // actionButtonText="VIEW ALL USERS →"
+        actionButtonLink="/dashboard/users"
+        actionButtonVariant="outline"
+        actionButtonText="VIEW ALL USERS →"
       />
       <ApplicationsListingWrapper
         jobs={jobs}
