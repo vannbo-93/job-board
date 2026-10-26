@@ -5,6 +5,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createJob } from "@/services/jobs/jobs.service";
+import { updateJob } from "@/services/jobs/jobs.service"; // أضفها إلى الاستيراد الموجود
 
 const FIELDS = [
   "title",
@@ -17,12 +18,7 @@ const FIELDS = [
   "requirements",
 ] as const;
 
-export type CreateJobValues = Omit<
-  Record<(typeof FIELDS)[number], string>,
-  "type"
-> & {
-  type: "FULL-TIME" | "PART-TIME" | "CONTRACT" | "INTERNSHIP";
-};
+export type CreateJobValues = Record<(typeof FIELDS)[number], string>;
 
 export type CreateJobState =
   | {
@@ -59,8 +55,6 @@ export async function handleCreateJob(
   revalidatePath("/jobs");
   redirect("/dashboard/jobs");
 }
-
-import { updateJob } from "@/services/jobs/jobs.service"; // أضفها إلى الاستيراد الموجود
 
 export async function handleUpdateJob(
   jobId: string,
