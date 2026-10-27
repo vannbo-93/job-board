@@ -1,47 +1,59 @@
 /** @format */
 
-import AdminPageHeader from "@/components/common/AdminPageHeader";
-import ApplicationsListingWrapper from "@/components/applications/ApplicationsListingWrapper";
+import { Suspense } from "react";
+import DashboardStats from "@/components/dashboard/DashboardStats";
+import RecentApplications from "@/components/dashboard/RecentApplications";
 import { getJobs } from "@/services/jobs/jobs.service";
 import { getApplications } from "@/services/applications/applications.service";
-import { getCandidates } from "@/services/candidates/candidates.service";
 
-async function ApplicationsManagementPage() {
-  const [jobsResult, applicationsResult, candidatesResult] = await Promise.all([
-    getJobs(),
-    getApplications(),
-    getCandidates(),
-  ]);
-
-  if (!jobsResult.success) return <div>Error loading jobs</div>;
-  if (!applicationsResult.success) return <div>Error loading applications</div>;
-  if (!candidatesResult.success) return <div>Error loading candidates</div>;
-
-  const jobs = jobsResult.data;
-  const applications = applicationsResult.data;
-  const candidates = candidatesResult.data;
-
-  const activeCount = applications.filter(
-    (a) => a.status !== "REJECTED",
-  ).length;
-
+export default function DashboardPage() {
   return (
     <>
-      <AdminPageHeader
-        title="APPLICATIONS"
-        subtitle={`${activeCount} ACTIVE · ${applications.length} TOTAL`}
-        // TODO: restore when /dashboard/users exists
-        actionButtonLink="/dashboard/users"
-        actionButtonVariant="outline"
-        actionButtonText="VIEW ALL USERS →"
-      />
-      <ApplicationsListingWrapper
-        jobs={jobs}
-        applications={applications}
-        candidates={candidates}
-      />
+      <h1 className="text-4xl">OVERVIEW</h1>
+      <p className="font-mono text-sm text-muted-foreground mt-1">
+        ADMIN DASHBOARD
+      </p>
+
+      <Suspense fallback={<p className="mt-6 font-mono text-sm">LOADING...</p>}>
+        <DashboardData />
+      </Suspense>
     </>
   );
 }
 
-export default ApplicationsManagementPage;
+async function DashboardData() {
+  const [jobsResult, applicationsResult] = await Promise.all([
+    getJobs(),
+    getApplications(),
+  ]);
+
+  if (!jobsResult.success) return <div>Error loading jobs</div>;
+  if (!applicationsResult.success) return <div>Error loading applications</div>;
+
+  const jobs = jobsResult.data;
+  const applications = applicationsResult.data;
+
+  const interviews = applications.filter(
+    (a) => a.status === "INTERVIEW",
+  ).length;
+  const scored = applications.filter((a) => a.aiScore > 0);
+  const avgScore =
+    scored.length === 0
+      ? "—"
+      : (scored.reduce((sum, a) => sum + a.aiScore, 0) / scored.length).toFixed(
+          1,
+        );
+  const totalCandidates = new Set(applications.map((a) => a.candidateId)).size;
+
+  return (
+    <>
+      <DashboardStats
+        activeJobs={jobs.length}
+        totalCandidates={totalCandidates}
+        avgScore={avgScore}
+        interviews={interviews}
+      />
+      <RecentApplications applications={applications} />
+    </>
+  );
+}

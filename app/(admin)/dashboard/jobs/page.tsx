@@ -1,15 +1,21 @@
 /** @format */
 
+import { Suspense } from "react";
 import AdminPageHeader from "@/components/common/AdminPageHeader";
 import JobManagementTable from "@/components/job-management/JobManagementTable";
 import { getJobs } from "@/services/jobs/jobs.service";
 
-async function JobsManagementPage() {
-  const result = await getJobs();
+export default function JobsManagementPage() {
+  return (
+    <Suspense fallback={<p className="font-mono text-sm">LOADING...</p>}>
+      <JobsData />
+    </Suspense>
+  );
+}
 
-  if (!result.success) {
-    return <div>Error loading jobs</div>;
-  }
+async function JobsData() {
+  const result = await getJobs();
+  if (!result.success) return <div>Error loading jobs</div>;
 
   const jobs = result.data;
 
@@ -26,5 +32,3 @@ async function JobsManagementPage() {
     </>
   );
 }
-
-export default JobsManagementPage;

@@ -1,12 +1,21 @@
 /** @format */
 
+import { Suspense } from "react";
 import AdminPageHeader from "@/components/common/AdminPageHeader";
 import UsersListingWrapper from "@/components/users/UsersListingWrapper";
 import { getJobs } from "@/services/jobs/jobs.service";
 import { getApplications } from "@/services/applications/applications.service";
 import { getCandidates } from "@/services/candidates/candidates.service";
 
-async function UsersPage() {
+export default function UsersPage() {
+  return (
+    <Suspense fallback={<p className="font-mono text-sm">LOADING...</p>}>
+      <UsersData />
+    </Suspense>
+  );
+}
+
+async function UsersData() {
   const [jobsResult, applicationsResult, candidatesResult] = await Promise.all([
     getJobs(),
     getApplications(),
@@ -24,10 +33,6 @@ async function UsersPage() {
       <AdminPageHeader
         title="USERS"
         subtitle={`${candidates.length} REGISTERED CANDIDATES`}
-        // TODO: restore when /dashboard/users/new exists
-        // actionButtonLink="/dashboard/users/new"
-        // actionButtonVariant="accent"
-        // actionButtonText="+ CREATE USER"
       />
       <UsersListingWrapper
         jobs={jobsResult.data}
@@ -37,5 +42,3 @@ async function UsersPage() {
     </>
   );
 }
-
-export default UsersPage;

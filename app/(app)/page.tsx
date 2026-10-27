@@ -1,21 +1,28 @@
 /** @format */
 
+import { Suspense } from "react";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { FeaturedJobs } from "@/components/landing/FeaturedJobs";
 import { getJobs } from "@/services/jobs/jobs.service";
 
-async function Home() {
-  const result = await getJobs();
-  if (!result.success) {
-    return <div>Error loading jobs</div>;
-  }
-  const { data: jobs = [] } = result;
+export default function Home() {
   return (
     <>
       <HeroSection />
-      <FeaturedJobs jobs={jobs} />
+      <Suspense
+        fallback={
+          <p className="max-w-7xl mx-auto px-6 py-16 font-mono text-sm">
+            LOADING...
+          </p>
+        }>
+        <FeaturedJobsData />
+      </Suspense>
     </>
   );
 }
 
-export default Home;
+async function FeaturedJobsData() {
+  const result = await getJobs();
+  if (!result.success) return null;
+  return <FeaturedJobs jobs={result.data} />;
+}
