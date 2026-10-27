@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import AdminPageHeader from "@/components/common/AdminPageHeader";
 import JobManagementTable from "@/components/job-management/JobManagementTable";
 import { getJobs } from "@/services/jobs/jobs.service";
+import { connection } from "next/server";
 
 export default function JobsManagementPage() {
   return (
@@ -14,6 +15,7 @@ export default function JobsManagementPage() {
 }
 
 async function JobsData() {
+  await connection();
   const result = await getJobs();
   if (!result.success) return <div>Error loading jobs</div>;
 

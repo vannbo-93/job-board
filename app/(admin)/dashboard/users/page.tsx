@@ -6,6 +6,7 @@ import UsersListingWrapper from "@/components/users/UsersListingWrapper";
 import { getJobs } from "@/services/jobs/jobs.service";
 import { getApplications } from "@/services/applications/applications.service";
 import { getCandidates } from "@/services/candidates/candidates.service";
+import { connection } from "next/server";
 
 export default function UsersPage() {
   return (
@@ -16,6 +17,7 @@ export default function UsersPage() {
 }
 
 async function UsersData() {
+  await connection();
   const [jobsResult, applicationsResult, candidatesResult] = await Promise.all([
     getJobs(),
     getApplications(),

@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { FeaturedJobs } from "@/components/landing/FeaturedJobs";
 import { getJobs } from "@/services/jobs/jobs.service";
+import { connection } from "next/server";
 
 export default function Home() {
   return (
@@ -22,6 +23,7 @@ export default function Home() {
 }
 
 async function FeaturedJobsData() {
+  await connection();
   const result = await getJobs();
   if (!result.success) return null;
   return <FeaturedJobs jobs={result.data} />;

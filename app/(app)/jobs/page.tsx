@@ -6,6 +6,7 @@ import FilterSidebar from "@/components/jobs/FilterSidebar";
 import { JobsList } from "@/components/jobs/JobsList";
 import JobsProvider from "@/context/jobs/JobsProvider";
 import { getJobs } from "@/services/jobs/jobs.service";
+import { connection } from "next/server";
 
 export default function JobsPage() {
   return (
@@ -19,6 +20,7 @@ export default function JobsPage() {
 }
 
 async function JobsData() {
+  await connection();
   const result = await getJobs();
   const jobs = result.success ? result.data : [];
 

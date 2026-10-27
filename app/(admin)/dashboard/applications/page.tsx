@@ -5,6 +5,7 @@ import DashboardStats from "@/components/dashboard/DashboardStats";
 import RecentApplications from "@/components/dashboard/RecentApplications";
 import { getJobs } from "@/services/jobs/jobs.service";
 import { getApplications } from "@/services/applications/applications.service";
+import { connection } from "next/server";
 
 export default function DashboardPage() {
   return (
@@ -22,6 +23,7 @@ export default function DashboardPage() {
 }
 
 async function DashboardData() {
+  await connection();
   const [jobsResult, applicationsResult] = await Promise.all([
     getJobs(),
     getApplications(),
