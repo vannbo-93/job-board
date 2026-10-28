@@ -1,36 +1,54 @@
-// /** @format */
+/** @format */
 
-// "use server";
+"use server";
 
-// // import { applyToJob } from "@/services/applications/applications.service";
-// import { applyToJob } from "@/services/applications/applications.service";
-// import { ApplyToJobInput } from "@/services/applications/applications.validation";
+import { revalidatePath } from "next/cache";
+import { applyToJob } from "@/services/applications/applications.service";
 
-// export type ApplyToJobState =
-//   | {
-//       errors?: Record<string, string[]>;
-//     }
-//   | undefined;
+const FIELDS = [
+  "jobId",
+  "candidateName",
+  "candidateEmail",
+  "candidateLinkedin",
+  "candidateCoverLetter",
+] as const;
 
-// export async function handleApplyToJob(
-//   prevState: ApplyToJobState,
-//   formData: FormData,
-// ): Promise<ApplyToJobState> {
-//   const raw = Object.fromEntries(formData);
+export type ApplyToJobValues = Record<(typeof FIELDS)[number], string>;
 
-//   const data = {
-//     ...(raw as unknown as ApplyToJobInput),
-//   };
+export type ApplyToJobState =
+  | {
+      success?: boolean;
+      errors?: Record<string, string[] | undefined>;
+      values?: ApplyToJobValues;
+    }
+  | undefined;
 
-//   const result = await applyToJob(data);
+export async function handleApplyToJob(
+  _prevState: ApplyToJobState,
+  formData: FormData,
+): Promise<ApplyToJobState> {
+  const values = Object.fromEntries(
+    FIELDS.map((field) => [field, String(formData.get(field) ?? "")]),
+  ) as ApplyToJobValues;
 
-//   if (!result.success) {
-//     return {
-//       errors: Object.fromEntries(
-//         Object.entries(result.errors).filter(
-//           (entry): entry is [string, string[]] => entry[1] !== undefined,
-//         ),
-//       ),
-//     };
-//   }
-// }
+  let result;
+  try {
+    result = await applyToJob(values);
+  } catch (error) {
+    console.error("handleApplyToJob failed:", error);
+    return {
+      success: false,
+      errors: { form: ["Something went wrong. Please try again."] },
+      values,
+    };
+  }
+
+  if (!result.success) {
+    return { success: false, errors: result.errors, values };
+  }
+
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/applications");
+  revalidatePath("/dashboard/jobs");
+  return { success: true };
+}
