@@ -59,3 +59,9 @@ export async function deleteJobById(id: string): Promise<boolean> {
   const deleted = await JobModel.findByIdAndDelete(id);
   return deleted !== null;
 }
+//دالة تزيد العداد
+export async function incrementJobApplicants(id: string): Promise<void> {
+  if (!isValidObjectId(id)) return;
+  await dbConnect();
+  await JobModel.updateOne({ _id: id }, { $inc: { applicants: 1 } });
+}
