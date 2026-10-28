@@ -7,6 +7,16 @@ type Props = {
 };
 
 function RecentApplications({ applications }: Props) {
+  if (applications.length === 0) {
+    return (
+      <div className="mt-8">
+        <h2 className="text-xl">RECENT APPLICATIONS</h2>
+        <p className="mt-4 brutal-border p-8 text-center font-mono text-sm text-muted-foreground">
+          NO APPLICATIONS YET.
+        </p>
+      </div>
+    );
+  }
   return (
     <div className="mt-8">
       <h3 className="font-heading text-lg font-bold mb-4">
