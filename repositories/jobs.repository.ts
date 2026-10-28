@@ -52,3 +52,10 @@ export async function updateJobById(
   }).lean<JobLean>();
   return doc ? toJob(doc) : null;
 }
+
+export async function deleteJobById(id: string): Promise<boolean> {
+  if (!isValidObjectId(id)) return false;
+  await dbConnect();
+  const deleted = await JobModel.findByIdAndDelete(id);
+  return deleted !== null;
+}

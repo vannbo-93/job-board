@@ -6,11 +6,18 @@ import { Button } from "@/components/ui/button";
 type Props = {
   isOpen: boolean;
   itemName?: string;
+  isDeleting?: boolean;
   onDelete: () => void;
   onCancel: () => void;
 };
 
-function DeletePopup({ isOpen, itemName, onDelete, onCancel }: Props) {
+function DeletePopup({
+  isOpen,
+  itemName,
+  isDeleting = false,
+  onDelete,
+  onCancel,
+}: Props) {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   // Open/close the native dialog when isOpen changes
@@ -54,13 +61,17 @@ function DeletePopup({ isOpen, itemName, onDelete, onCancel }: Props) {
         </p>
 
         <div className="flex mt-6">
-          <Button variant="destructive" onClick={onDelete}>
-            CONFIRM DELETE
+          <Button
+            variant="destructive"
+            onClick={onDelete}
+            disabled={isDeleting}>
+            {isDeleting ? "DELETING..." : "CONFIRM DELETE"}
           </Button>
           <Button
             variant="outline"
             className="border-l-0"
             onClick={onCancel}
+            disabled={isDeleting}
             autoFocus>
             CANCEL
           </Button>

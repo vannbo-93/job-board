@@ -9,6 +9,7 @@ import {
   saveNewJob,
   updateJobById,
 } from "@/repositories/jobs.repository";
+import { deleteJobById } from "@/repositories/jobs.repository";
 
 // Shared by create and update: validate raw input against the schema
 function validateJob(input: unknown) {
@@ -53,4 +54,13 @@ export async function getJob(id: string): Promise<ServiceResult<Job>> {
   if (!job) return { success: false, errors: { id: ["Job not found"] } };
 
   return { success: true, data: job };
+}
+
+export async function deleteJob(
+  id: string,
+): Promise<ServiceResult<{ id: string }>> {
+  const deleted = await deleteJobById(id);
+  if (!deleted) return { success: false, errors: { id: ["Job not found"] } };
+
+  return { success: true, data: { id } };
 }

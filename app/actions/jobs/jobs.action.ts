@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createJob } from "@/services/jobs/jobs.service";
 import { updateJob } from "@/services/jobs/jobs.service"; // أضفها إلى الاستيراد الموجود
-
+import { deleteJob } from "@/services/jobs/jobs.service";
 const FIELDS = [
   "title",
   "company",
@@ -84,4 +84,26 @@ export async function handleUpdateJob(
   revalidatePath("/jobs");
   revalidatePath(`/jobs/${jobId}`);
   redirect("/dashboard/jobs");
+}
+
+export async function handleDeleteJob(
+  jobId: string,
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const result = await deleteJob(jobId);
+    if (!result.success) {
+      return {
+        success: false,
+        error: result.errors.id?.[0] ?? "Could not delete job",
+      };
+    }
+  } catch (error) {
+    console.error("handleDeleteJob failed:", error);
+    return { success: false, error: "Something went wrong. Please try again." };
+  }
+
+  revalidatePath("/dashboard/jobs");
+  revalidatePath("/jobs");
+  revalidatePath(`/jobs/${jobId}`);
+  return { success: true };
 }

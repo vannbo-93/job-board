@@ -2,7 +2,8 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { handleDeleteJob as deleteJobAction } from "@/app/actions/jobs/jobs.action";
 import Link from "next/link";
 import type { Job } from "@/types";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -23,10 +24,22 @@ function formatDate(date: string) {
 function JobManagementTable({ jobs }: Props) {
   const [jobIdToDelete, setJobIdToDelete] = useState<string | null>(null);
 
+  const [isDeleting, startTransition] = useTransition();
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
   const handleDeleteJob = () => {
-    // TODO: delete job from database (day 9)
-    console.log(`Deleting job with ID: ${jobIdToDelete}`);
-    setJobIdToDelete(null);
+    if (!jobIdToDelete) return;
+    const id = jobIdToDelete;
+
+    startTransition(async () => {
+      const result = await deleteJobAction(id);
+      if (!result.success) {
+        setDeleteError(result.error ?? "Could not delete job");
+        return;
+      }
+      setDeleteError(null);
+      setJobIdToDelete(null);
+    });
   };
 
   const jobToDelete = jobs.find((job) => job.id === jobIdToDelete);
@@ -36,6 +49,11 @@ function JobManagementTable({ jobs }: Props) {
 
   return (
     <div className="mt-8 brutal-border overflow-x-auto">
+      {deleteError && (
+        <p className="px-4 py-3 font-mono text-sm text-destructive border-b-3 border-foreground">
+          {deleteError}
+        </p>
+      )}
       <table className="w-full">
         <thead>
           <tr className="bg-foreground text-background">
@@ -108,7 +126,10 @@ function JobManagementTable({ jobs }: Props) {
                     variant="destructive"
                     size="sm"
                     className="border-l-0 shadow-none"
-                    onClick={() => setJobIdToDelete(job.id)}>
+                    onClick={() => {
+                      setDeleteError(null);
+                      setJobIdToDelete(job.id);
+                    }}>
                     DELETE
                   </Button>
                 </div>
@@ -121,8 +142,12 @@ function JobManagementTable({ jobs }: Props) {
       <DeletePopup
         isOpen={jobIdToDelete !== null}
         itemName={jobToDelete?.title}
+        isDeleting={isDeleting}
         onDelete={handleDeleteJob}
-        onCancel={() => setJobIdToDelete(null)}
+        onCancel={() => {
+          setDeleteError(null);
+          setJobIdToDelete(null);
+        }}
       />
     </div>
   );
