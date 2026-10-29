@@ -4,6 +4,8 @@ export * from "./Job";
 export * from "./Candidate";
 export * from "./Application";
 export * from "./StatusFilters";
+export * from "./Roles";
+export * from "./User";
 // export * from "./ServiceResult";
 export type ServiceResult<T> =
   | { success: true; data: T }
