@@ -11,7 +11,13 @@ import {
   type ApplyToJobState,
 } from "@/app/actions/applications/applications.action";
 
-function JobApplyForm({ jobId }: { jobId: string }) {
+type Props = {
+  jobId: string;
+  defaultName?: string;
+  defaultEmail?: string;
+};
+
+function JobApplyForm({ jobId, defaultName = "", defaultEmail = "" }: Props) {
   const [state, formAction, isPending] = useActionState<
     ApplyToJobState,
     FormData
@@ -30,6 +36,7 @@ function JobApplyForm({ jobId }: { jobId: string }) {
     );
   }
 
+  // After a failed submit use what was typed, otherwise the logged-in user's details
   const v = state?.values;
   const e = state?.errors;
 
@@ -51,7 +58,7 @@ function JobApplyForm({ jobId }: { jobId: string }) {
           placeholder="YOUR NAME"
           autoComplete="name"
           required
-          defaultValue={v?.candidateName}
+          defaultValue={v?.candidateName ?? defaultName}
           error={e?.candidateName?.[0]}
         />
         <Input
@@ -61,7 +68,7 @@ function JobApplyForm({ jobId }: { jobId: string }) {
           placeholder="YOUR@EMAIL.COM"
           autoComplete="email"
           required
-          defaultValue={v?.candidateEmail}
+          defaultValue={v?.candidateEmail ?? defaultEmail}
           error={e?.candidateEmail?.[0]}
         />
         <Input
@@ -92,9 +99,9 @@ function JobApplyForm({ jobId }: { jobId: string }) {
           error={e?.candidateCoverLetter?.[0]}
         />
 
-        {(e?.form || e?.jobId) && (
+        {(e?.auth || e?.form || e?.jobId) && (
           <p className="font-mono text-sm text-destructive">
-            {e.form?.[0] ?? e.jobId?.[0]}
+            {e.auth?.[0] ?? e.form?.[0] ?? e.jobId?.[0]}
           </p>
         )}
 

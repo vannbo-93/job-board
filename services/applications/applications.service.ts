@@ -5,25 +5,26 @@ import type { Application, ServiceResult } from "@/types";
 import {
   findAllApplications,
   findApplicationById,
-  findApplicationsByJobId,
+  findApplicationsByCandidateId,
   saveNewApplication,
 } from "@/repositories/applications.repository";
 import {
   findJobById,
   incrementJobApplicants,
 } from "@/repositories/jobs.repository";
+import { getCurrentUser } from "@/lib/current-user";
 import { applyToJobSchema } from "./applications.validation";
 
-// TODO: replace with the logged-in candidate once authentication exists (day 10)
-const TEMP_CANDIDATE_ID = "69f21dc7e02f33189d6b08d8";
-
-const ALREADY_APPLIED = {
-  candidateEmail: ["You already applied to this job with this email"],
-};
+const ALREADY_APPLIED = { form: ["You already applied to this job"] };
 
 export async function applyToJob(
   input: unknown,
 ): Promise<ServiceResult<Application>> {
+  const currentUser = await getCurrentUser();
+  if (!currentUser) {
+    return { success: false, errors: { auth: ["Please log in to apply"] } };
+  }
+
   const validated = applyToJobSchema.safeParse(input);
   if (!validated.success) {
     return {
@@ -32,23 +33,21 @@ export async function applyToJob(
     };
   }
 
-  const { jobId, candidateEmail } = validated.data;
+  const { jobId } = validated.data;
 
+  // TODO: check if job is active or not
   const job = await findJobById(jobId);
   if (!job) return { success: false, errors: { jobId: ["Job not found"] } };
 
-  // Friendly check first; the unique index below is the real guarantee
-  const existing = await findApplicationsByJobId(jobId);
-  if (
-    existing.some((app) => app.candidateEmail === candidateEmail.toLowerCase())
-  ) {
+  const previous = await findApplicationsByCandidateId(currentUser.id);
+  if (previous.some((app) => app.jobId === jobId)) {
     return { success: false, errors: ALREADY_APPLIED };
   }
 
   try {
     const newApplication = await saveNewApplication({
       ...validated.data,
-      candidateId: TEMP_CANDIDATE_ID,
+      candidateId: currentUser.id,
       jobTitle: job.title,
       role: job.title, // TODO: confirm what "role" should hold
       jobCompany: job.company,

@@ -2,10 +2,15 @@
 
 import { Suspense } from "react";
 import LoginForm from "@/components/auth/LoginForm";
+import RedirectIfLoggedIn from "@/components/auth/RedirectIfLoggedIn";
 
 export default function LoginPage(props: PageProps<"/login">) {
   return (
     <div className="max-w-md mx-auto py-16 px-6">
+      <Suspense fallback={null}>
+        <RedirectIfLoggedIn />
+      </Suspense>
+
       <h1 className="text-3xl mb-2">LOGIN</h1>
       <p className="font-mono text-sm text-muted-foreground mb-8">
         LOGIN TO YOUR ACCOUNT
@@ -15,7 +20,7 @@ export default function LoginPage(props: PageProps<"/login">) {
         <RegisteredNotice searchParams={props.searchParams} />
       </Suspense>
 
-      <Suspense fallback={null}>
+      <Suspense fallback={<div className="mt-8 brutal-border h-80" />}>
         <LoginForm />
       </Suspense>
     </div>
