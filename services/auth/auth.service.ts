@@ -1,4 +1,6 @@
-﻿import bcrypt from "bcryptjs";
+﻿/** @format */
+
+import { hashPassword } from "@/lib/password";
 import { z } from "zod";
 import type { ServiceResult, User } from "@/types";
 import { findUserByEmail, saveNewUser } from "@/repositories/users.repository";
@@ -9,7 +11,10 @@ const EMAIL_TAKEN = { email: ["This email is already registered"] };
 export async function signup(input: unknown): Promise<ServiceResult<User>> {
   const validated = signupSchema.safeParse(input);
   if (!validated.success) {
-    return { success: false, errors: z.flattenError(validated.error).fieldErrors };
+    return {
+      success: false,
+      errors: z.flattenError(validated.error).fieldErrors,
+    };
   }
 
   // Pick only what we need; confirmPassword and anything extra are dropped here
@@ -19,7 +24,7 @@ export async function signup(input: unknown): Promise<ServiceResult<User>> {
     return { success: false, errors: EMAIL_TAKEN };
   }
 
-  const passwordHash = await bcrypt.hash(password, 12);
+  const passwordHash = await hashPassword(password);
 
   try {
     const user = await saveNewUser({
@@ -31,7 +36,12 @@ export async function signup(input: unknown): Promise<ServiceResult<User>> {
     return { success: true, data: user };
   } catch (error) {
     // E11000 = duplicate key: two sign-ups with the same email at the same moment
-    if (typeof error === "object" && error && "code" in error && error.code === 11000) {
+    if (
+      typeof error === "object" &&
+      error &&
+      "code" in error &&
+      error.code === 11000
+    ) {
       return { success: false, errors: EMAIL_TAKEN };
     }
     throw error;
