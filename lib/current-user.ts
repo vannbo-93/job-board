@@ -19,3 +19,8 @@ export async function getCurrentUser(): Promise<User | null> {
     role: session.user.role,
   };
 }
+
+export async function requireAdmin() {
+  const user = await getCurrentUser();
+  return user?.role === "ADMIN" ? user : null;
+}

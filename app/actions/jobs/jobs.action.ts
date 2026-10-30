@@ -4,9 +4,9 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { createJob } from "@/services/jobs/jobs.service";
-import { updateJob } from "@/services/jobs/jobs.service"; // أضفها إلى الاستيراد الموجود
-import { deleteJob } from "@/services/jobs/jobs.service";
+import { createJob, updateJob, deleteJob } from "@/services/jobs/jobs.service";
+import { requireAdmin } from "@/lib/current-user";
+
 const FIELDS = [
   "title",
   "company",
@@ -27,13 +27,21 @@ export type CreateJobState =
     }
   | undefined;
 
+function readValues(formData: FormData): CreateJobValues {
+  return Object.fromEntries(
+    FIELDS.map((field) => [field, String(formData.get(field) ?? "")]),
+  ) as CreateJobValues;
+}
+
 export async function handleCreateJob(
   _prevState: CreateJobState,
   formData: FormData,
 ): Promise<CreateJobState> {
-  const values = Object.fromEntries(
-    FIELDS.map((field) => [field, String(formData.get(field) ?? "")]),
-  ) as CreateJobValues;
+  if (!(await requireAdmin())) {
+    return { errors: { form: ["Not authorized"] } };
+  }
+
+  const values = readValues(formData);
 
   let result;
   try {
@@ -47,7 +55,6 @@ export async function handleCreateJob(
   }
 
   if (!result.success) {
-    // Send the values back so the form can refill itself
     return { errors: result.errors, values };
   }
 
@@ -61,9 +68,11 @@ export async function handleUpdateJob(
   _prevState: CreateJobState,
   formData: FormData,
 ): Promise<CreateJobState> {
-  const values = Object.fromEntries(
-    FIELDS.map((field) => [field, String(formData.get(field) ?? "")]),
-  ) as CreateJobValues;
+  if (!(await requireAdmin())) {
+    return { errors: { form: ["Not authorized"] } };
+  }
+
+  const values = readValues(formData);
 
   let result;
   try {
@@ -89,6 +98,10 @@ export async function handleUpdateJob(
 export async function handleDeleteJob(
   jobId: string,
 ): Promise<{ success: boolean; error?: string }> {
+  if (!(await requireAdmin())) {
+    return { success: false, error: "Not authorized" };
+  }
+
   try {
     const result = await deleteJob(jobId);
     if (!result.success) {
