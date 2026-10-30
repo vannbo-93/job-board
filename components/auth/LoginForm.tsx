@@ -73,11 +73,7 @@ function LoginForm() {
         </p>
       )}
 
-      <Button
-        type="submit"
-        variant="accent"
-        className="w-full"
-        disabled={isPending}>
+      <Button type="submit" variant="accent" disabled={isPending}>
         {isPending ? "LOGGING IN..." : "LOGIN"}
       </Button>
 

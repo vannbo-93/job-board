@@ -68,11 +68,7 @@ function SignupForm() {
         <p className="font-mono text-sm text-destructive">{e.form[0]}</p>
       )}
 
-      <Button
-        type="submit"
-        variant="accent"
-        className="w-full"
-        disabled={isPending}>
+      <Button type="submit" variant="accent" disabled={isPending}>
         {isPending ? "CREATING ACCOUNT..." : "SIGN UP"}
       </Button>
 
