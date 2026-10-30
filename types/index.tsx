@@ -6,6 +6,7 @@ export * from "./Application";
 export * from "./StatusFilters";
 export * from "./Roles";
 export * from "./User";
+export * from "./UserProfile";
 // export * from "./ServiceResult";
 export type ServiceResult<T> =
   | { success: true; data: T }
